@@ -1,0 +1,60 @@
+{% extends 'polls/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/css/style.css' %}" />
+
+<form id="form" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden"></input>
+    <div>
+        Choices:
+        <div id="choice_list">
+
+        </div>
+    </div>
+
+    <div class="new-choice-input-contaier">
+        <input id="choice_input" type="text" place="choice name"></input>
+        <img class="icon" src="{% static 'polls/img/plus.png' %}" id="add_choice"/>
+    </div>
+
+    <input class="button" type="submit" value="Create Question">
+</form>
+
+<script>
+
+    var choices = [];
+
+    var choiceButton = document.getElementById("add_choice")
+
+    choiceButton.addEventListener("click", function() {
+
+        /* Adds hidden choice input field to form */
+
+        var choiceText = document.getElementById("choice_input");
+    
+        var choiceInputContainer = document.getElementById("choice_list");
+        var formContainer = document.getElementById("form");
+
+        var hiddenNode = document.createElement("input");
+        hiddenNode.type = "hidden";
+        hiddenNode.name = "choice_" + choices.length;
+        hiddenNode.value = choiceText.value;
+
+        var node = document.createElement("input");
+        node.value = choiceText.value;
+        node.type = "text";
+        node.disabled = true;
+
+        choiceInputContainer.appendChild(node);
+        formContainer.appendChild(hiddenNode);
+        choiceText.value = "";
+
+        choices.push(choiceText.value);    
+    });
+
+</script>
+
+{% endblock %}

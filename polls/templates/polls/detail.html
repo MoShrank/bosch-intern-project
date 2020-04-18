@@ -1,0 +1,46 @@
+{% extends 'polls/base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/css/style.css' %}" />
+
+<div class="detail-container">
+    <h1>{{ question.question_text }}</h1>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <form action="{% url 'polls:vote' question.id %}" method="post">
+        {% csrf_token %}
+        {% for choice in question.choice_set.all %}
+
+        <label class="container">{{ choice.choice_text }}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" 
+                   value="{{ choice.id }}" type="checkbox">
+            <span class="checkmark"></span>
+        </label>
+
+        {% endfor %}
+        <input class="button" type="submit" value="Vote" />
+        
+        <div class="share-container">
+            <input type="text" id="link" disbaled=true value="{{ request.META.HTTP_HOST }}{% url 'polls:detail' question.pk %}"/>
+            <img class="icon" onclick="copyLink()" src="{% static 'polls/img/copy.png' %}"/>
+        </div>
+
+    </form>
+</div>
+
+<script>
+
+    function copyLink() {
+        var textElement = document.getElementById("link");
+        textElement.select();
+
+        document.execCommand("copy");
+
+    }
+
+</script>
+
+{% endblock %}

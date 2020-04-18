@@ -1,0 +1,26 @@
+{% extends 'polls/base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'polls/css/style.css' %}" />
+
+{% if latest_question_list %}
+    {% for question in latest_question_list %}
+    
+    <a href="{% url 'polls:detail' question.pk %}">
+        <div class="question-card-container">
+            <p>{{ question.question_text }}</p>
+            <img class="icon" src="{% static 'polls/img/link.png' %}"/>
+        </div>
+    </a>
+    {% endfor %}
+
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+<a href="{% url 'polls:new_question' %}"><button class="button">Add Question</button></a>
+
+{% endblock %}
